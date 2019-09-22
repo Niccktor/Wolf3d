@@ -6,7 +6,7 @@
 /*   By: tbeguin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 05:29:43 by tbeguin           #+#    #+#             */
-/*   Updated: 2019/09/21 07:36:09 by tbeguin          ###   ########.fr       */
+/*   Updated: 2019/09/22 17:53:14 by tbeguin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@ typedef struct			s_player
 	double				x;
 	double				y;
 	double				z;
-	int					angle;	
+	double				dir_x;
+	double				dir_y;
+	double				cam_x;
+	double				cam_y;
+	double				p_x;
+	double				p_y;
 }						t_player;
 
 typedef struct			s_map
@@ -34,7 +39,7 @@ typedef struct			s_map
 
 typedef struct			s_image
 {
-	void				img;
+	void				*img;
 	unsigned int		*img_str;
 	int					height;
 	int					width;
@@ -42,15 +47,51 @@ typedef struct			s_image
 	int					endian;
 }						t_image;
 
+typedef struct			s_ray
+{
+	int					x;
+	int					y;
+	double				cam_x;
+	double				dir_x;
+	double				dir_y;
+	double				side_dist_x;
+	double				side_dist_y;
+	double				dx;
+	double				dy;
+	int					step_x;
+	int					step_y;
+	int					side;
+}						t_ray;
+
 typedef struct			s_mlx
 {
 	void				*mlx;
 	void				*win;
+	char				*name;
 	struct s_player		player;
 	struct s_image		img;
 	struct s_map		map;
+	struct s_ray		ray;
+	int					time;
+	int					old_time;
 }						t_mlx;
 
+/*
+**						main.c
+*/
+int						argv_err(t_mlx *all);
+int						ft_exit(t_mlx *all);
+/*
+**						init.c
+*/
 void					init_all(t_mlx *all);
-
+/*
+**						ray.c
+*/
+void					render(t_mlx *all);
+/*
+**						draw.c
+*/
+void					fill_pixel(t_mlx *all, int x, int y, unsigned int c);
+void					ver_line(t_mlx *a, int x, int s, int e, unsigned int c);
 #endif 

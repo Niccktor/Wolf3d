@@ -1,0 +1,136 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ray.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tbeguin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/22 13:36:49 by tbeguin           #+#    #+#             */
+/*   Updated: 2019/09/22 16:12:58 by tbeguin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../inc/wolf.h"
+#include <math.h>
+
+static void	ver_line(t_mlx *all, int x, int draw_start,
+		int draw_end, unsigned int color)
+{
+	while (draw_start < draw_end)
+	{
+		fill_pixel(all, draw_start, x, color);
+		draw_start++;
+		write(1, "test\n", 6);
+	}
+}
+
+void		test_ray(t_mlx *all)
+{
+	double pos_x;
+	double pos_y;
+	double dir_x;
+	double dir_y;
+	double plane_x;
+	double plane_y;
+
+	pos_x = 12;
+	pos_y = 14;
+	dir_x = -1;
+	dir_y = 0;
+	plane_x = 0;
+	plane_y = 0.66;
+
+	double cam_X;
+	double ray_dir_x;
+	double ray_dir_y;
+	int x;
+
+	int	box_x;
+	int	box_y;
+	double side_dist_x;
+	double side_dist_y;
+	double delta_dist_x;
+	double delta_dist_y;
+
+	int step_x;
+	int step_y;
+
+	int hit;
+	int side;
+	
+	int draw_start;
+	int	draw_end;
+	int	line_height;
+	unsigned int color;
+	double		prep_wall_dist;
+	while (1)
+	{
+		x = 0;
+		while (x < all->img.width)
+		{
+			cam_X = 2 * x / (double)all->img.width - 1;
+			ray_dir_x = dir_x + plane_x * cam_X;
+			ray_dir_y = dir_y + plane_y * cam_X;
+			box_x = (int)pos_x;
+			box_y = (int)pos_y;
+
+			delta_dist_x = fabs(1 / ray_dir_x);
+			delta_dist_y = fabs(1 / ray_dir_y);
+			if (ray_dir_x < 0)
+			{
+				step_x = -1;
+				side_dist_x = (pos_x - box_x) * delta_dist_x;
+			}
+			else
+			{
+				step_x = 1;
+				side_dist_x = (box_x + 1 - pos_x) * delta_dist_x;
+			}
+			if (ray_dir_y < 0)
+			{
+				step_y = -1;
+				side_dist_y = (pos_y - box_y) * delta_dist_y;
+			}
+			else
+			{
+				step_y = 1;
+				side_dist_y = (box_y + 1 - pos_y) * delta_dist_y;
+			}
+			while (hit == 0)
+			{
+				if (side_dist_x < side_dist_y)
+				{
+					side_dist_x += delta_dist_x;
+					box_x += step_x;
+					side = 0;
+				}
+				else
+				{	
+					side_dist_y += delta_dist_y;
+					box_y +=  step_y;
+					side = 1;
+				}
+				
+				if (all->map.map[box_x][box_y] == 1)
+					hit = 1;
+			}
+			x++;
+			if (side == 0)
+				prep_wall_dist = (box_x - pos_x + (1 - step_x) / 2) / ray_dir_x;
+			else
+				prep_wall_dist = (box_y - pos_y + (1 - step_y) / 2) / ray_dir_y;
+			line_height = (200 / prep_wall_dist);
+			draw_start = -line_height / 2 + 200 / 2;
+			if (draw_start < 0)
+				draw_start = 0;
+			draw_end = line_height / 2 + 200 / 2;
+			if (draw_end >= 200)
+				draw_end = 200 - 1;
+			color = 255 << 16;
+			if (side == 1)
+				color = color / 2;
+			ver_line(all, x, draw_start, draw_end, color);
+		}
+		mlx_put_image_to_window(all->mlx, all->win, all->img.img, 0, 0);
+	}
+}
