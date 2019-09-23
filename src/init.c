@@ -6,7 +6,7 @@
 /*   By: tbeguin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 05:51:29 by tbeguin           #+#    #+#             */
-/*   Updated: 2019/09/22 18:26:26 by tbeguin          ###   ########.fr       */
+/*   Updated: 2019/09/23 20:39:21 by nicktor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,9 @@ void	init_all(t_mlx *all)
 	all->win = mlx_new_window(all->mlx, all->img.width, all->img.height,
 			"Wolf3d tbeguin@42");
 	all->img.img = mlx_new_image(all->mlx, all->img.width, all->img.height);
-	all->img.img_str = (unsigned int *)mlx_get_data_addr(all->mlx,
+	all->img.img_str = (unsigned int *)mlx_get_data_addr(all->img.img,
 		   	&bpp, &s_l, &endian);
+	ft_bzero(all->img.img_str, all->img.width * all->img.height * 4);
 	init_maps(all);
 	init_player(all);
 	render(all);
