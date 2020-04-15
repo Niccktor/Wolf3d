@@ -6,7 +6,7 @@
 /*   By: tbeguin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/21 05:29:43 by tbeguin           #+#    #+#             */
-/*   Updated: 2019/09/22 17:53:14 by tbeguin          ###   ########.fr       */
+/*   Updated: 2019/09/23 23:03:17 by nicktor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define WOLF_H
 
 #include <mlx.h>
+#include "key.h"
 #include "../libft/libft.h"
 
 
@@ -72,8 +73,8 @@ typedef struct			s_mlx
 	struct s_image		img;
 	struct s_map		map;
 	struct s_ray		ray;
-	int					time;
-	int					old_time;
+	int					x;
+	int					y;
 }						t_mlx;
 
 /*
@@ -94,4 +95,11 @@ void					render(t_mlx *all);
 */
 void					fill_pixel(t_mlx *all, int x, int y, unsigned int c);
 void					ver_line(t_mlx *a, int x, int s, int e, unsigned int c);
+/*
+**						event.c
+*/
+int					key_event(int key, t_mlx *all);
+int					ft_mouse_move(int x, int y, t_mlx *all);
+
+
 #endif 

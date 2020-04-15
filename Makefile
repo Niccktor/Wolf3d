@@ -6,7 +6,7 @@
 #    By: tbeguin <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/07 20:10:01 by tbeguin           #+#    #+#              #
-#    Updated: 2019/09/23 20:11:59 by nicktor          ###   ########.fr        #
+#    Updated: 2019/09/23 23:01:46 by nicktor          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ FT_LNK = -L $(LIB_FT) -l ft
 SRC =  main.c	\
 	   init.c	\
 	   ray.c	\
-	   draw.c
+	   draw.c	\
+	   event.c
 
 OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 

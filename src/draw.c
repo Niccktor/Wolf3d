@@ -6,7 +6,7 @@
 /*   By: tbeguin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 14:11:58 by tbeguin           #+#    #+#             */
-/*   Updated: 2019/09/23 20:42:37 by nicktor          ###   ########.fr       */
+/*   Updated: 2019/09/30 18:30:32 by nicktor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void		ver_line(t_mlx *a, int x, int s, int e, unsigned int c)
 {
 	while (s < e)
 	{
-		printf("s = %d, e = %d\n", s, e);
 		fill_pixel(a, x, s, c);
 		s++;
 	}
