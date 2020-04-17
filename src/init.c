@@ -101,5 +101,5 @@ void	init_all(t_mlx *all)
 	ft_bzero(all->img.img_str, all->img.width * all->img.height * 4);
 	init_maps(all);
 	init_player(all);
-	render(all);
+	threads(*all);
 }

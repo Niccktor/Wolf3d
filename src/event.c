@@ -43,7 +43,7 @@ int		ft_mouse_move(int x, int y, t_mlx* all)
 	all->x = x;
 	all->y = y;
 	printf("x = %d, y = %d\n", x, y);
-	render(all);
+	threads(*all);
 	return (0);
 }
 
@@ -93,6 +93,6 @@ int		key_event(int key, t_mlx *all)
 		all->player.p_y = old_plan_x * sin(-THETHA) + all->player.p_y * cos(-THETHA);
 	}
 	printf("key = %d\nx = %f, y = %f\n", key, all->player.x, all->player.y);
-	render(all);
+	threads(*all);
 	return (0);
 }

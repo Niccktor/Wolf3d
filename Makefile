@@ -33,7 +33,7 @@ OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 
 ifeq ($(OS), Linux)
 	MLX_DIR = ./miniLibX_X11
-	MLX_LNK = -l mlx -lXext -lX11
+	MLX_LNK = -l mlx -lXext -lX11 -pthread
 else
 	MLX_DIR = ./minilibX
 	MLX_LNK = -l mlx -framework OpenGL -framework AppKit

@@ -12,10 +12,14 @@
 
 #ifndef WOLF_H
 # define WOLF_H
+# define NB_THD 5
 
 #include <mlx.h>
+#include <pthread.h>
 #include "key.h"
 #include "../libft/libft.h"
+
+
 
 
 typedef struct			s_player
@@ -77,6 +81,14 @@ typedef struct			s_mlx
 	int					y;
 }						t_mlx;
 
+typedef struct		s_thread
+{
+	int					i;
+	t_mlx			all;
+	pthread_t		thread;
+}					t_thread;
+
+void					threads(t_mlx all);
 /*
 **						main.c
 */
@@ -89,7 +101,9 @@ void					init_all(t_mlx *all);
 /*
 **						ray.c
 */
-void					render(t_mlx *all);
+
+//void					render(t_mlx *all);
+void					*render(void *thd);
 /*
 **						draw.c
 */
