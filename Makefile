@@ -27,7 +27,8 @@ SRC =  main.c	\
 	   init.c	\
 	   ray.c	\
 	   draw.c	\
-	   event.c
+	   event.c	\
+	   parser.c
 
 OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 

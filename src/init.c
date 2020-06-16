@@ -67,6 +67,7 @@ static void		init_maps(t_mlx *all)
 		}
 		i++;
 	}
+	//read_map(all, "maps/01.maps");
 }
 
 static void		init_player(t_mlx *all)

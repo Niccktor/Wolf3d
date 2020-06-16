@@ -105,9 +105,13 @@ static void		cast_wall(t_mlx *all, int i)
 
 }
 */
+int		threads_loop(t_mlx* all)
+{
+	threads(*all);
+	return (1);
+}
 
-
-void		threads(t_mlx all)
+int		threads(t_mlx all)
 {
 	int			i;
 	t_thread	threads[NB_THD];
@@ -125,6 +129,7 @@ void		threads(t_mlx all)
 	while (i < NB_THD)
 		pthread_join(threads[i++].thread, NULL);
 	mlx_put_image_to_window(all.mlx, all.win, all.img.img, 0, 0);
+	return (0);
 }
 
 
@@ -139,7 +144,7 @@ void			*render(void *thd)
 	int i_max = (thread->i + 1) * (all.img.width / NB_THD);
 	if (thread->i + 1 == NB_THD)
 		i_max = all.img.width;
-	printf("thd = %i, i = %i, i_max = %i\n", thread->i, i, i_max);
+	//printf("thd = %i, i = %i, i_max = %i\n", thread->i, i, i_max);
 
 	while (i < i_max)
 	{

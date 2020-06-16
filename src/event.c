@@ -42,7 +42,7 @@ int		ft_mouse_move(int x, int y, t_mlx* all)
 	
 	all->x = x;
 	all->y = y;
-	printf("x = %d, y = %d\n", x, y);
+	/*printf("x = %d, y = %d\n", x, y);*/
 	threads(*all);
 	return (0);
 }
@@ -69,7 +69,7 @@ int		key_event(int key, t_mlx *all)
 		all->player.x -= 0.1 * all->player.p_x;
 		all->player.y -= 0.1 * all->player.p_y;
 	}
-	if (key == KEY_D && all->map.map[(int)(all->player.x - 0.3 * all->player.dir_x)][(int)(all->player.y - 0.3 * all->player.dir_y)] == 0)
+	if (key == KEY_D && all->map.map[(int)(all->player.x + 0.3 * all->player.p_x)][(int)(all->player.y + 0.3 * all->player.p_y)] == 0)
 	{
 		all->player.x += 0.1 * all->player.p_x;
 		all->player.y += 0.1 * all->player.p_y;
@@ -92,7 +92,7 @@ int		key_event(int key, t_mlx *all)
 		all->player.p_x = all->player.p_x * cos(-THETHA) - all->player.p_y * sin(-THETHA);
 		all->player.p_y = old_plan_x * sin(-THETHA) + all->player.p_y * cos(-THETHA);
 	}
-	printf("key = %d\nx = %f, y = %f\n", key, all->player.x, all->player.y);
+	//printf("key = %d\nx = %f, y = %f\n", key, all->player.x, all->player.y);
 	threads(*all);
 	return (0);
 }
