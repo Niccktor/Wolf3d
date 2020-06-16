@@ -54,22 +54,22 @@ int		key_event(int key, t_mlx *all)
 
 	if (key == ESC)
 		ft_exit(all);
-	if  (key == KEY_W)
+	if  (key == KEY_W && all->map.map[(int)(all->player.x + 0.3 * all->player.dir_x)][(int)(all->player.y + 0.3 * all->player.dir_y)] == 0)
 	{
 		all->player.x += 0.1 * all->player.dir_x;
 		all->player.y += 0.1 * all->player.dir_y;
 	}
-	if (key == KEY_S)
+	if (key == KEY_S && all->map.map[(int)(all->player.x - 0.3 * all->player.dir_x)][(int)(all->player.y - 0.3 * all->player.dir_y)] == 0)
 	{
 		all->player.x -= 0.1 * all->player.dir_x;
 		all->player.y -= 0.1 * all->player.dir_y;
 	}
-	if (key == KEY_A)
+	if (key == KEY_A && all->map.map[(int)(all->player.x - 0.3 * all->player.p_x)][(int)(all->player.y - 0.3 * all->player.p_y)] == 0)
 	{
 		all->player.x -= 0.1 * all->player.p_x;
 		all->player.y -= 0.1 * all->player.p_y;
 	}
-	if (key == KEY_D)
+	if (key == KEY_D && all->map.map[(int)(all->player.x - 0.3 * all->player.dir_x)][(int)(all->player.y - 0.3 * all->player.dir_y)] == 0)
 	{
 		all->player.x += 0.1 * all->player.p_x;
 		all->player.y += 0.1 * all->player.p_y;
