@@ -11,63 +11,14 @@
 /* ************************************************************************** */
 
 #include "../inc/wolf.h"
+#include<stdio.h>
 
-/*
-void	inti_map(t_mlx *all, int fd)
+
+static void		init_maps(t_mlx *all, char* map_file)
 {
-
-}*/
-/*
-static t_list		*get_data(int fd)
-{
-	t_list	*lst;
-	t_list	*tmp;
-	char	*line;
-	int		i;
-
-	i = -1;
-	while ((i = get_next_line(fd, &line)))
-	{
-
-	}
-}
-
-static int			wf_check_map(t_mlx *all, char *map)
-{
-	int		fd;
-	t_list	*lst;
-
-	if ((fd = open(map, O_RDONLY)) == -1 || (lst = get_data(fd)) == NULL)
-		return(NULL);
-
-}
-
-init_maps(all, fd);
-*/
-static void		init_maps(t_mlx *all)
-{
-	int i;
-	int j;
-
-	all->map.height = 10;
-	all->map.width = 10;
-	all->map.map = (int **)ft_memalloc(sizeof(int *) * 50);
-	i = 0;
-	while (i <= 10)
-	{
-		all->map.map[i] = (int *)ft_memalloc(sizeof(int) * 50);
-		j = 0;
-		while (j <= 10)
-		{
-			if (j == 0 || j == 9 || i == 0 || i == 9)
-				all->map.map[i][j] = 1;
-			else
-				all->map.map[i][j] = 0;
-			j++;
-		}
-		i++;
-	}
-	//read_map(all, "maps/01.maps");
+	all->map.file = map_file;
+	if (read_map(all, all->map.file) == -1)
+		exit(0);
 }
 
 static void		init_player(t_mlx *all)
@@ -81,14 +32,13 @@ static void		init_player(t_mlx *all)
 	all->player.p_y = 0.66f;
 }
 
-void	init_all(t_mlx *all)
+void	init_all(t_mlx *all, char *map_file)
 {
 	int	bpp;
 	int	s_l;
 	int	endian;
 
 	ft_bzero(all, sizeof(t_mlx));
-//	fd = wf_check_map(all, map);
 	all->img.width = 500;
 	all->img.height = 500;
 	all->x = -1;
@@ -100,7 +50,7 @@ void	init_all(t_mlx *all)
 	all->img.img_str = (unsigned int *)mlx_get_data_addr(all->img.img,
 		   	&bpp, &s_l, &endian);
 	ft_bzero(all->img.img_str, all->img.width * all->img.height * 4);
-	init_maps(all);
+	init_maps(all, map_file);
 	init_player(all);
 	threads(*all);
 }

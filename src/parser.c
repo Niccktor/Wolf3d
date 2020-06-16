@@ -12,6 +12,10 @@
 
 #include "../inc/wolf.h"
 #include <fcntl.h>
+
+
+#include <stdio.h>
+
 /*
 static int		count_block(char *line)
 {
@@ -140,26 +144,41 @@ static t_list* get_data(int fd)
 	return (lst);
 }
 */
-
-static int		count_block(char* line)
+/*
 {
 	int i;
-	int count;
+	int a;
 
-	count = 0;
+	a = 0;
 	i = 0;
 	while (line[i] != '\n')
 	{
-		if (line[i] == ' ')
-		{
-			count++;
-			while (line[i] == ' ')
-				i++;
-		}
+		if (line[i] != ' ')
+			a++;
 		i++;
 	}
-	return (count);
+	return (a);
+}*/
+
+int		count_block(char* str)
+{
+	int res;
+	int i;
+	i = 0;
+	res = 0;
+	while (str[i] && str[i] == ' ')
+		i++;
+	while (str[i] && str[i] != '\n')
+	{
+		while (str[i] && str[i] != ' ')
+			i++;
+		res++;
+		while (str[i] && str[i] == ' ')
+			i++;
+	}
+	return (res);
 }
+
 
 static void *kill_lst(t_list* lst)
 {
@@ -175,6 +194,7 @@ static void *kill_lst(t_list* lst)
 	return (NULL);
 }
 
+
 static t_list *get_data(int fd)
 {
 	t_list* lst;
@@ -184,6 +204,7 @@ static t_list *get_data(int fd)
 	int		len;
 
 	len = -42;
+	lst = NULL;
 	while ((ret = get_next_line(fd, &line)))
 	{
 		if (len == -42)
@@ -208,7 +229,7 @@ static int	malloc_map(t_mlx *all, int i, int j)
 	if ((all->map.map = (int**)ft_memalloc(sizeof(int*) * i)) == NULL)
 		return (-1);
 	x = 0;
-	while (x < j)
+	while (x < i)
 	{
 		if ((all->map.map[x] = (int*)ft_memalloc(sizeof(int) * j)) == NULL)
 		{
@@ -221,6 +242,36 @@ static int	malloc_map(t_mlx *all, int i, int j)
 	return (0);
 }
 
+int put_data(t_mlx* all, t_list* lst)
+{
+	t_list* tmp;
+	char** map;
+	int		i;
+	int		j;
+
+	tmp = lst;
+	i = 0;
+	while (i < all->map.height)
+	{
+		j = 0;
+		if ((map = ft_strsplit(tmp->content, ' ')) == NULL)
+			return (/*free_map(all->map.map)*/ -1);
+		while (j < all->map.width)
+		{
+			if ((all->map.map[i][j] = ft_atoi(map[j])) < 0)
+				return (/*free_map(all->map.map)*/ -1);
+			ft_strdel(&(map[j]));
+			j++;
+		}
+		ft_memdel((void **)map);
+		tmp = tmp->next;
+		i++;
+	}
+	kill_lst(lst);
+	return (0);
+}
+
+
 int			read_map(t_mlx* all, char* map)
 {
 	int fd;
@@ -228,10 +279,25 @@ int			read_map(t_mlx* all, char* map)
 
 	if ((fd = open(map, O_RDONLY)) == -1 || (lst = get_data(fd)) == NULL)
 		return (-1);
-	if (malloc_map(all, ft_lstcount(lst), count_block((char *)lst->content) == -1))
+	if (malloc_map(all, ft_lstcount(lst), count_block((char*)lst->content)) == -1)
 		return (-1);
-/*	if (put_data(all, lst) == -1)
-		return (-1);*/
-	return (0);
+	if (put_data(all, lst) == -1)
+		return (-1);
 
+	//
+	int i = 0;
+	int j;
+	while (i < all->map.height)
+	{
+		j = 0;
+		while (j < all->map.width)
+		{
+			ft_putnbr(all->map.map[i][j]);
+			ft_putchar(' ');
+			j++;
+		}
+		ft_putchar('\n');
+		i++;
+	}
+	return (0);
 }

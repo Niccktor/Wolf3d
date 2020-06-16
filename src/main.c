@@ -21,21 +21,7 @@ int		main(int argc, char **argv)
 	all.name = argv[0];
 	if (argc != 2)
 		argv_err(&all);
-	init_all(&all);
-
-	int m = 0;
-	int n;
-	while (all.map.height > m)
-	{
-		n = 0;
-		while (all.map.width > n)
-		{
-			printf("%d", all.map.map[m][n]);
-			n++;
-		}
-		printf("\n");
-		m++;
-	}
+	init_all(&all, argv[1]);
 	mlx_hook(all.win, 2, 1L << 0, key_event, &all);
 	mlx_hook(all.win, 6, 1L << 6, ft_mouse_move, &all);
 	mlx_hook(all.win, 17, 1L << 0, ft_exit, &all);
