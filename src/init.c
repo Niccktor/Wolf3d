@@ -60,11 +60,16 @@ void	init_all(t_mlx *all, char *map_file)
 	int	endian;
 
 	ft_bzero(all, sizeof(t_mlx));
-	all->img.width = 500;
-	all->img.height = 500;
+	all->img.width = 900;
+	all->img.height = 700;
 	all->x = -1;
 	all->y = -1;
 	all->mlx = mlx_init();
+	all->time = 0;
+	all->oldTime = 0;
+	all->fps = 0;
+	all->ticks = 0;
+
 	all->win = mlx_new_window(all->mlx, all->img.width, all->img.height,
 			"Wolf3d tbeguin@42");
 	all->img.img = mlx_new_image(all->mlx, all->img.width, all->img.height);

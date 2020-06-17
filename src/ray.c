@@ -107,6 +107,20 @@ static void		cast_wall(t_mlx *all, int i)
 */
 int		threads_loop(t_mlx* all)
 {
+
+	all->time = (unsigned long)time(NULL);
+	all->ticks++;
+	if (all->time - all->oldTime != 0)
+	{
+		printf("fps = %lu ticks = %lu\n", all->fps, all->ticks);
+		all->ticks = 0;
+		all->fps = 0;
+	}
+	all->oldTime = all->time;
+	if (all->ticks % 10000 != 0)
+		return (1);
+	else
+		all->fps++;
 	threads(*all);
 	return (1);
 }
@@ -118,6 +132,7 @@ int		threads(t_mlx all)
 
 	i = 0;
 	ft_bzero(all.img.img_str, all.img.width * all.img.height * 4);
+
 	while (i < NB_THD)
 	{
 		threads[i].i = i;
@@ -144,8 +159,6 @@ void			*render(void *thd)
 	int i_max = (thread->i + 1) * (all.img.width / NB_THD);
 	if (thread->i + 1 == NB_THD)
 		i_max = all.img.width;
-	//printf("thd = %i, i = %i, i_max = %i\n", thread->i, i, i_max);
-
 	while (i < i_max)
 	{
 		all.ray.cam_x = 2 * i / (double)all.img.width - 1;

@@ -80,6 +80,10 @@ typedef struct			s_mlx
 	struct s_ray		ray;
 	int					x;
 	int					y;
+	unsigned long		time;
+	unsigned long		oldTime;
+	unsigned long		fps;
+	unsigned long		ticks;
 }						t_mlx;
 
 typedef struct		s_thread
