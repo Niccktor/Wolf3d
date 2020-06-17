@@ -25,17 +25,25 @@ static void		find_starter(t_mlx* all)
 {
 	int i;
 	int j;
+	int find;
 
+	find = -1;
 	i = 0;
 	while (i < all->map.height)
 	{
 		j = 0;
 		while (j < all->map.width)
 		{
+			if (find == -1 && all->map.map[i][j] == 0)
+			{
+				all->player.x = i + 0.5f;
+				all->player.y = j + 0.5f;
+			}
 			if (all->map.map[i][j] == 5)
 			{
 				all->player.x = i + 0.5f;
 				all->player.y = j + 0.5f;
+				find = 1;
 			}
 			j++;
 		}

@@ -213,9 +213,7 @@ void			*render(void *thd)
 			if (all.map.map[all.ray.x][all.ray.y] == 1)
 				hit = 1;
 		}
-
 		double perpWallDist;
-
 		if (all.ray.side == 0)
 			perpWallDist = (all.ray.x - all.player.x + (1 - all.ray.step_x) / 2) / all.ray.dir_x;
 		else
@@ -229,18 +227,6 @@ void			*render(void *thd)
 		int end = lineHeight / 2 + all.img.height / 2;
 		if (end >= all.img.height)
 			end = all.img.height - 1;
-
-		/*
-		all->ray.cam_x = 2 * i / (double)all->img.width - 1;
-		all->ray.dir_x = all->player.dir_x
-			+ all->player.p_x * all->ray.cam_x;
-		all->ray.dir_y = all->player.dir_y
-			+ all->player.p_y * all->ray.cam_x;
-		all->ray.dx = fabs(1 / all->ray.dir_x);
-		all->ray.dx = fabs(1 / all->ray.dir_y);
-		set_side_dist(all);
-		dda(all);
-		cast_wall(all, i);*/
 		ver_line(&all, i, 0, start, 0x00FF00);
 		if (all.ray.side == 1)
 			ver_line(&all, i, start, end, 0xFF00FF);

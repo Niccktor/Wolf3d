@@ -14,7 +14,7 @@ NAME = wolf3d
 OS = $(shell uname)
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra 
 
 SRC_DIR = ./src
 INC_DIR = ./inc
