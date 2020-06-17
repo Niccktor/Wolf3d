@@ -263,7 +263,7 @@ int put_data(t_mlx* all, t_list* lst)
 			ft_strdel(&(map[j]));
 			j++;
 		}
-		ft_memdel((void **)map);
+		ft_memdel((void **)&map);
 		tmp = tmp->next;
 		i++;
 	}
