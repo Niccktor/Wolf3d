@@ -283,8 +283,6 @@ int			read_map(t_mlx* all, char* map)
 		return (-1);
 	if (put_data(all, lst) == -1)
 		return (-1);
-
-	//
 	int i = 0;
 	int j;
 	while (i < all->map.height)

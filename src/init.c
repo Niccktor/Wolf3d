@@ -21,10 +21,31 @@ static void		init_maps(t_mlx *all, char* map_file)
 		exit(0);
 }
 
+static void		find_starter(t_mlx* all)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < all->map.height)
+	{
+		j = 0;
+		while (j < all->map.width)
+		{
+			if (all->map.map[i][j] == 5)
+			{
+				all->player.x = i + 0.5f;
+				all->player.y = j + 0.5f;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
 static void		init_player(t_mlx *all)
 {
-	all->player.x = 5.0f;
-	all->player.y = 5.0f;
+	find_starter(all);
 	all->player.z = 0.0f;
 	all->player.dir_x = -1.0f;
 	all->player.dir_y = 0.0f;

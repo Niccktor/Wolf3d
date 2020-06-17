@@ -197,7 +197,7 @@ void			*render(void *thd)
 				all.ray.y += all.ray.step_y;
 				all.ray.side = 1;
 			}
-			if (all.map.map[all.ray.x][all.ray.y] > 0)
+			if (all.map.map[all.ray.x][all.ray.y] == 1)
 				hit = 1;
 		}
 
