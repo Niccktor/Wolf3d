@@ -117,12 +117,12 @@ void					ver_line(t_mlx *a, int x, int s, int e, unsigned int c);
 /*
 **						event.c
 */
-int					key_event(int key, t_mlx *all);
-int					ft_mouse_move(int x, int y, t_mlx *all);
+int						key_event(int key, t_mlx *all);
+int						ft_mouse_move(int x, int y, t_mlx *all);
 
 
-int					threads_loop(t_mlx* all);
-int					read_map(t_mlx* all, char* map);
+int						threads_loop(t_mlx* all);
+int						read_map(t_mlx* all, char* map);
 
 
 
