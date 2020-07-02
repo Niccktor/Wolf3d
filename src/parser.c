@@ -12,153 +12,7 @@
 
 #include "../inc/wolf.h"
 #include <fcntl.h>
-
-
 #include <stdio.h>
-
-/*
-static int		count_block(char *line)
-{
-	int i;
-	int count;
-
-	i = 0;
-	count = 1;
-	while (line[i] != '\n' && line[i] != '\n')
-	{
-		if (line[i] == ' ')
-		{
-			count++;
-			while (line[i] != ' ')
-				i++;
-		}
-		i++;
-	}
-	return (count);
-}
-
-static void *kill_lst(t_list *lst)
-{
-	t_list *next;
-
-
-	while (lst)
-	{
-		next = lst->next;
-		ft_memdel(&lst->content);
-		ft_memdel((void *)&lst);
-		lst = next;
-	}
-	return  (NULL);
-}
-
-
-static t_list		*get_data(int fd)
-{
-	t_list	*lst;
-	t_list	*tmp;
-	char	*line;
-	int		i;
-	int		len;
-
-	len = -42;
-	i = -1;
-	while ((i = get_next_line(fd, &line)))
-	{
-		if (len == -42)
-			len = count_block(line);
-		if (len == 0 || len != count_block(line)
-			|| (tmp = ft_lstnew(line, ft_strlen(line) + sizeof(char))) == NULL)
-				return (kill_lst(lst));
-		ft_strdel(&line);
-		ft_lstadd(&lst, tmp);
-	}
-	if (i == -1)
-		return (kill_lst(lst));
-	ft_lstrev(&lst);
-	return (lst);
-}
-
-static int			new_map(t_mlx *all, t_list *lst)
-{
-	int i;
-
-	all->map.height = ft_lstcount(lst);
-	all->map.width = count_block((char *)lst->content) + 1;
-	if (all->map.map = (int **)ft_memalloc(sizeof(int *) * all->map.height) == NULL)
-	{
-		kill_lst(lst);
-		return (-1);
-	}
-	i = 0;
-	while (i < all->map.height)
-	{
-		if (all->map.map[i] =
-				(int *)ft_memalloc(sizeof(int) * all->map.width) == NULL)
-		{
-			while (i > 0)
-				ft_memdel((void **)&all->map.map + --i);
-			return (-1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int			read_map(t_mlx* all, char* map)
-{
-	int		fd;
-	t_list* lst;
-
-	if ((fd = open(map, O_RDONLY)) == -1 || (lst = get_data(fd)) == NULL)
-		return(-1);
-	if (new_map(all, lst) == -1)
-		return (-1);
-
-	return (0);
-}*/
-/*
-static t_list* get_data(int fd)
-{
-	t_list* lst;
-	t_list* tmp;
-	char* line;
-	int		i;
-	int		len;
-
-	len = -42;
-	i = -1;
-	while ((i = get_next_line(fd, &line)))
-	{
-		if (len == -42)
-			len = count_block(line);
-		if (len == 0 || len != count_block(line)
-			|| (tmp = ft_lstnew(line, ft_strlen(line) + sizeof(char))) == NULL)
-			return (kill_lst(lst));
-		ft_strdel(&line);
-		ft_lstadd(&lst, tmp);
-	}
-	if (i == -1)
-		return (kill_lst(lst));
-	ft_lstrev(&lst);
-	return (lst);
-}
-*/
-/*
-{
-	int i;
-	int a;
-
-	a = 0;
-	i = 0;
-	while (line[i] != '\n')
-	{
-		if (line[i] != ' ')
-			a++;
-		i++;
-	}
-	return (a);
-}*/
 
 int		count_block(char* str)
 {
@@ -170,10 +24,10 @@ int		count_block(char* str)
 		i++;
 	while (str[i] && str[i] != '\n')
 	{
-		while (str[i] && str[i] != ' ')
+		while (str[i] && str[i] != ' ' && str[i] != '\n')
 			i++;
 		res++;
-		while (str[i] && str[i] == ' ')
+		while (str[i] && str[i] == ' ' && str[i] != '\n')
 			i++;
 	}
 	return (res);
@@ -191,6 +45,7 @@ static void *kill_lst(t_list* lst)
 		ft_memdel((void**)&lst);
 		lst = next;
 	}
+	ft_memdel((void**)lst);
 	return (NULL);
 }
 
@@ -211,7 +66,10 @@ static t_list *get_data(int fd)
 			len = count_block(line);
 		if (len == 0 || len != count_block(line)
 			|| (tmp = ft_lstnew(line, ft_strlen(line) + sizeof(char))) == NULL)
+		{
+			ft_strdel(&line);
 			return (kill_lst(lst));
+		}
 		ft_strdel(&line);
 		ft_lstadd(&lst, tmp);
 	}
@@ -248,18 +106,29 @@ int put_data(t_mlx* all, t_list* lst)
 	char** map;
 	int		i;
 	int		j;
+	static int l = 0;
 
 	tmp = lst;
 	i = 0;
 	while (i < all->map.height)
 	{
+		l++;
 		j = 0;
 		if ((map = ft_strsplit(tmp->content, ' ')) == NULL)
-			return (/*free_map(all->map.map)*/ -1);
+		{
+			/*while (i > 0)
+				ft_memdel((void**)all->map.map + --i);*/
+			return (-1);
+		}
 		while (j < all->map.width)
 		{
 			if ((all->map.map[i][j] = ft_atoi(map[j])) < 0)
-				return (/*free_map(all->map.map)*/ -1);
+			{
+				ft_strdel(&(map[j]));
+				while (i > 0)
+					ft_memdel((void**)all->map.map + --i);
+				return (-1);
+			}
 			ft_strdel(&(map[j]));
 			j++;
 		}
