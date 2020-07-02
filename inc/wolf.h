@@ -19,9 +19,6 @@
 #include "key.h"
 #include "../libft/libft.h"
 
-
-
-
 typedef struct			s_player
 {
 	double				x;
@@ -64,6 +61,10 @@ typedef struct			s_ray
 	double				side_dist_y;
 	double				dx;
 	double				dy;
+	double				perpWallDist;
+	int					start;
+	int					end;
+	int					lineHeight;
 	int					step_x;
 	int					step_y;
 	int					side;
@@ -78,6 +79,7 @@ typedef struct			s_mlx
 	struct s_image		img;
 	struct s_map		map;
 	struct s_ray		ray;
+	struct s_image		*texture[20];
 	int					x;
 	int					y;
 	unsigned long		time;
@@ -123,6 +125,8 @@ int						ft_mouse_move(int x, int y, t_mlx *all);
 
 int						threads_loop(t_mlx* all);
 int						read_map(t_mlx* all, char* map);
+
+int		init_texture(t_mlx* all);
 
 
 

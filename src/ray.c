@@ -133,18 +133,60 @@ static void render_wall(t_mlx* all, int i)
 	else
 		perpWallDist = (all->ray.y - all->player.y + (1 - all->ray.step_y) / 2) / all->ray.dir_y;
 	lineHeight = (int)(all->img.height / perpWallDist);
+
 	start = -lineHeight / 2 + all->img.height / 2;
 	if (start < 0)
 		start = 0;
 	end = lineHeight / 2 + all->img.height / 2;
 	if (end >= all->img.height)
 		end = all->img.height - 1;
-	ver_line(all, i, 0, start, 0x00FF00);
+	// texture
+
+
+	double wallX;
+	if (all->ray.side == 0)
+		wallX = all->player.y + perpWallDist * all->ray.dir_y;
+	else
+		wallX = all->player.x + perpWallDist * all->ray.dir_x;
+	wallX -= floor(wallX);
+
+	int textureX;
+	
+	textureX = (int)(wallX * (double)(all->texture[0]->width));
+	if (all->ray.side == 0 && all->ray.dir_x > 0)
+		textureX = all->texture[0]->width - textureX - 1;
+	if (all->ray.side == 1 && all->ray.dir_y < 0)
+		textureX = all->texture[0]->width - textureX - 1;
+	double step;
+	step = 1.0 * all->texture[0]->height / lineHeight;
+	double texPos = (start - all->img.height / 2 + lineHeight / 2) * step;
+
+	int texY;
+	unsigned int color;
+	int j;
+	j = start;
+	while (j < end)
+	{
+		texY = (int)texPos & (all->texture[0]->height - 1);
+		texPos += step;
+		color = all->texture[0]->img_str[all->texture[0]->height * texY + textureX];
+		//printf("%ud\n", color);
+		fill_pixel(all, i, j , color);
+		j++;
+	}
+/*
+	cast_ceiling(all);
+	cast_wall(all);
+	cast_floor(all);
+	*/	
+	/*ver_line(all, i, 0, start, 0x00FF00);
 	if (all->ray.side == 1)
 		ver_line(all, i, start, end, 0xFF00FF);
 	else
 		ver_line(all, i, start, end, 0xFF00FF / 2);
-	ver_line(all, i, end,all->img.height, 0xFF0000);
+	ver_line(all, i, end,all->img.height, 0xFF0000);*/
+	
+
 }
 
 void			*render(void *thd)

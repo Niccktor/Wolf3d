@@ -14,7 +14,7 @@ NAME = wolf3d
 OS = $(shell uname)
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra 
+CFLAGS = -Wall -Werror -Wextra -pthread
 
 SRC_DIR = ./src
 INC_DIR = ./inc
@@ -28,21 +28,16 @@ SRC =  main.c	\
 	   ray.c	\
 	   draw.c	\
 	   event.c	\
-	   parser.c
+	   parser.c	\
+	   texture.c
 
 OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 
 ifeq ($(OS), Linux)
-	MLX_DIR = ./miniLibX_X11
-	MLX_LNK = -l mlx -lXext -lX11 -pthread
+	MLX_LNK = -L /usr/X11/lib /usr/X11/lib/libmlx.a -lXext -lX11
 else
-	MLX_DIR = ./minilibX
 	MLX_LNK = -l mlx -framework OpenGL -framework AppKit
 endif
-
-MLX_LNK += -L $(MLX_DIR)
-MLX_INC = -I $(MLX_DIR)
-MLX_LIB = $(addprefix $(MLX_DIR)/,mlx.a)
 
 all :
 	@mkdir -p $(OBJ_DIR)
@@ -50,7 +45,7 @@ all :
 	@make $(NAME)
 
 $(OBJ_DIR)/%.o:$(SRC_DIR)/%.c
-	@$(CC) -c $(CFLAGS) $(MLX_INC) -I $(LIB_FT) -I $(INC_DIR) $< -o $@
+	@$(CC) -c $(CFLAGS) -I $(LIB_FT) -I $(INC_DIR) $< -o $@
 	@echo "\033[36m$(CC) $(CFLAGS) -c $< -o $@\033[0m"
 
 $(NAME) : $(OBJ)

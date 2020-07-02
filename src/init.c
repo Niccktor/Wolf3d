@@ -77,13 +77,13 @@ void	init_all(t_mlx *all, char *map_file)
 	all->oldTime = 0;
 	all->fps = 0;
 	all->ticks = 0;
-
 	all->win = mlx_new_window(all->mlx, all->img.width, all->img.height,
 			"Wolf3d tbeguin@42");
 	all->img.img = mlx_new_image(all->mlx, all->img.width, all->img.height);
 	all->img.img_str = (unsigned int *)mlx_get_data_addr(all->img.img,
 		   	&bpp, &s_l, &endian);
 	ft_bzero(all->img.img_str, all->img.width * all->img.height * 4);
+	init_texture(all);
 	init_maps(all, map_file);
 	init_player(all);
 	threads(*all);

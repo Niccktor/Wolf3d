@@ -106,20 +106,14 @@ int put_data(t_mlx* all, t_list* lst)
 	char** map;
 	int		i;
 	int		j;
-	static int l = 0;
 
 	tmp = lst;
 	i = 0;
 	while (i < all->map.height)
 	{
-		l++;
 		j = 0;
 		if ((map = ft_strsplit(tmp->content, ' ')) == NULL)
-		{
-			/*while (i > 0)
-				ft_memdel((void**)all->map.map + --i);*/
 			return (-1);
-		}
 		while (j < all->map.width)
 		{
 			if ((all->map.map[i][j] = ft_atoi(map[j])) < 0)
@@ -152,6 +146,7 @@ int			read_map(t_mlx* all, char* map)
 		return (-1);
 	if (put_data(all, lst) == -1)
 		return (-1);
+// print map debug
 	int i = 0;
 	int j;
 	while (i < all->map.height)
@@ -166,5 +161,6 @@ int			read_map(t_mlx* all, char* map)
 		ft_putchar('\n');
 		i++;
 	}
+	// print map debug end
 	return (0);
 }
