@@ -20,62 +20,19 @@ t_image* xpm_load(char* tex, t_mlx* all)
 
 int		init_texture(t_mlx* all)
 {
-	static char* texture[20] = { "textures/brick.xpm", NULL };
+	static char* texture[20] = { "textures/brick.xpm", "textures/wood.xpm", "textures/stone.xpm" , NULL };
 	t_image* img;
 	int i;
 
+	all->text_max = 0;
 	i = 0;
-	while (i < 1 && texture[i])
+	while (i < 20 && texture[i])
 	{
 		if ((img = xpm_load(texture[i], all)) == NULL)
 			return (-1);
 		all->texture[i] = img;
+		all->text_max++;
 		i++;
 	}
 	return (0);
 }
-/*
-void	cast_celling(t_mlx* all)
-{
-
-}
-
-void	cast_wall(t_mlx* all)
-{
-	double wallX;
-	if (all->ray.side == 0)
-		wallX = all->player.y + perpWallDist * all->ray.dir_y;
-	else
-		wallX = all->player.x + perpWallDist * all->ray.dir_x;
-	wallX -= floor(wallX);
-
-	int textureX;
-
-	textureX = (int)(wallX * (double)(all->texture[0]->width));
-	if (all->ray.side == 0 && all->ray.dir_x > 0)
-		textureX = all->texture[0]->width - textureX - 1;
-	if (all->ray.side == 1 && all->ray.dir_y < 0)
-		textureX = all->texture[0]->width - textureX - 1;
-	double step;
-	step = 1.0 * all->texture[0]->height / lineHeight;
-	double texPos = (start - all->img.height / 2 + lineHeight / 2) * step;
-
-	int texY;
-	unsigned int color;
-	int j;
-	j = start;
-	while (j < end)
-	{
-		texY = (int)texPos & (all->texture[0]->height - 1);
-		texPos += step;
-		color = all->texture[0]->img_str[all->texture[0]->height * texY + textureX];
-		//printf("%ud\n", color);
-		fill_pixel(all, i, j, color);
-		j++;
-	}
-}
-
-void	cast_floor(t_mlx* all)
-{
-
-}*/

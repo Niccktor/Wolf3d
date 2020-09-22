@@ -68,6 +68,7 @@ typedef struct			s_ray
 	int					step_x;
 	int					step_y;
 	int					side;
+	int					wall;
 }						t_ray;
 
 typedef struct			s_mlx
@@ -82,6 +83,7 @@ typedef struct			s_mlx
 	struct s_image		*texture[20];
 	int					x;
 	int					y;
+	int					text_max;
 	unsigned long		time;
 	unsigned long		oldTime;
 	unsigned long		fps;

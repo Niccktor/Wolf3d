@@ -115,79 +115,92 @@ static void		render_dda(t_mlx* all)
 			all->ray.y += all->ray.step_y;
 			all->ray.side = 1;
 		}
-		if (all->map.map[all->ray.x][all->ray.y] == 1)
+		if (all->map.map[all->ray.x][all->ray.y] >= 1 && all->map.map[all->ray.x][all->ray.y] != 255)
+		{
 			hit = 1;
+			all->ray.wall = all->map.map[all->ray.x][all->ray.y] - 1;
+			if (all->ray.wall > all->text_max)
+				all->ray.wall = 0;
+		}
 	}
 }
 
-static void render_wall(t_mlx* all, int i)
+static void wall_dist(t_mlx* all)
 {
-	double	perpWallDist;
-	int		start;
-	int		end;
-	int		lineHeight;
-
-	perpWallDist = 0.0f;
+	all->ray.perpWallDist = 0.0f;
 	if (all->ray.side == 0)
-		perpWallDist = (all->ray.x - all->player.x + (1 - all->ray.step_x) / 2) / all->ray.dir_x;
+		all->ray.perpWallDist = (all->ray.x - all->player.x + (1 - all->ray.step_x) / 2) / all->ray.dir_x;
 	else
-		perpWallDist = (all->ray.y - all->player.y + (1 - all->ray.step_y) / 2) / all->ray.dir_y;
-	lineHeight = (int)(all->img.height / perpWallDist);
+		all->ray.perpWallDist = (all->ray.y - all->player.y + (1 - all->ray.step_y) / 2) / all->ray.dir_y;
+	all->ray.lineHeight = (int)(all->img.height / all->ray.perpWallDist);
+	all->ray.start = -all->ray.lineHeight / 2 + all->img.height / 2;
+	if (all->ray.start < 0)
+		all->ray.start = 0;
+	all->ray.end = all->ray.lineHeight / 2 + all->img.height / 2;
+	if (all->ray.end >= all->img.height)
+		all->ray.end = all->img.height - 1;
+}
 
-	start = -lineHeight / 2 + all->img.height / 2;
-	if (start < 0)
-		start = 0;
-	end = lineHeight / 2 + all->img.height / 2;
-	if (end >= all->img.height)
-		end = all->img.height - 1;
-	// texture
-
-
-	double wallX;
-	if (all->ray.side == 0)
-		wallX = all->player.y + perpWallDist * all->ray.dir_y;
-	else
-		wallX = all->player.x + perpWallDist * all->ray.dir_x;
-	wallX -= floor(wallX);
-
-	int textureX;
-	
-	textureX = (int)(wallX * (double)(all->texture[0]->width));
-	if (all->ray.side == 0 && all->ray.dir_x > 0)
-		textureX = all->texture[0]->width - textureX - 1;
-	if (all->ray.side == 1 && all->ray.dir_y < 0)
-		textureX = all->texture[0]->width - textureX - 1;
+static void render_wall(t_mlx* all, int i, int j, int texY)
+{
 	double step;
-	step = 1.0 * all->texture[0]->height / lineHeight;
-	double texPos = (start - all->img.height / 2 + lineHeight / 2) * step;
+	double wallX;
+	int textureX;
+	double texPos;
 
-	int texY;
-	unsigned int color;
-	int j;
-	j = start;
-	while (j < end)
+	if (all->ray.side == 0)
+		wallX = all->player.y + all->ray.perpWallDist * all->ray.dir_y;
+	else
+		wallX = all->player.x + all->ray.perpWallDist * all->ray.dir_x;
+	wallX -= floor(wallX);
+	textureX = (int)(wallX * (double)(all->texture[all->ray.wall]->width));
+	if (all->ray.side == 0 && all->ray.dir_x > 0)
+		textureX = all->texture[all->ray.wall]->width - textureX - 1;
+	if (all->ray.side == 1 && all->ray.dir_y < 0)
+		textureX = all->texture[all->ray.wall]->width - textureX - 1;
+	step = 1.0 * all->texture[all->ray.wall]->height / all->ray.lineHeight;
+	texPos = (all->ray.start - all->img.height / 2 + all->ray.lineHeight / 2) * step;
+	j = all->ray.start;
+	while (j < all->ray.end)
 	{
-		texY = (int)texPos & (all->texture[0]->height - 1);
+		texY = (int)texPos & (all->texture[all->ray.wall]->height - 1);
 		texPos += step;
-		color = all->texture[0]->img_str[all->texture[0]->height * texY + textureX];
-		//printf("%ud\n", color);
-		fill_pixel(all, i, j , color);
+		fill_pixel(all, i, j , all->texture[all->ray.wall]->img_str[all->texture[all->ray.wall]->height * texY + textureX]);
 		j++;
 	}
+}
+
 /*
 	cast_ceiling(all);
 	cast_wall(all);
 	cast_floor(all);
-	*/	
+	*/
 	/*ver_line(all, i, 0, start, 0x00FF00);
 	if (all->ray.side == 1)
 		ver_line(all, i, start, end, 0xFF00FF);
 	else
 		ver_line(all, i, start, end, 0xFF00FF / 2);
-	ver_line(all, i, end,all->img.height, 0xFF0000);*/
-	
+	ver_line(all, i, end,all->img.height, 0xFF0000);
+*/
+/*static void		cast_floor(t_mlx* all)
+{
+	int i;
+	int j;
+	double step_x;
+	double step_y;
+	double floor_x;
+	double floor_y;
 
-}
+	i = 0;
+	while (i < all->img.height)
+	{
+		step_x = ((0.5 * all->img.height) / (i - all->img.height)) * ((all->player.dir_x + all->player.p_x) - (all->player.dir_x - all->player.p_x)) / all->img.width;
+		step_y = ((0.5 * all->img.height) / (i - all->img.height)) * ((all->player.dir_y + all->player.p_y) - (all->player.dir_y - all->player.p_y)) / all->img.width;
+
+		floor_x = all->player.x + ((0.5 * all->img.height) / (i - all->img.height)) * (all->player.dir_x - all->player.p_x);
+		floor_y = all->player.x + ((0.5 * all->img.height) / (i - all->img.height)) * (all->player.dir_y - all->player.p_y);
+	}
+}*/
 
 void			*render(void *thd)
 {
@@ -207,7 +220,9 @@ void			*render(void *thd)
 		render_init(&all, i);
 		render_side(&all);
 		render_dda(&all);
-		render_wall(&all, i);
+		wall_dist(&all);
+		//cast_floor(&all);
+		render_wall(&all, i, 0, 0);
 		i++;
 	}
 	return (0);

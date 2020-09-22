@@ -39,8 +39,9 @@ static void		find_starter(t_mlx* all)
 				all->player.x = i + 0.5f;
 				all->player.y = j + 0.5f;
 			}
-			if (all->map.map[i][j] == 5)
+			if (all->map.map[i][j] == 255)
 			{
+				all->map.map[i][j] = 0;
 				all->player.x = i + 0.5f;
 				all->player.y = j + 0.5f;
 				find = 1;
